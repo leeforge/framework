@@ -1,37 +1,37 @@
 # Leeforge Framework
 
-Leeforge Framework is the shared technical core for backend services.
+Leeforge Framework 是 Leeforge 后端服务的通用技术内核。
 
-## Scope
+## 模块边界
 
-This repository/module only provides infrastructure capabilities:
+该模块只承载基础设施能力：
 
-- Authentication and authorization (Casbin-based)
-- Standard HTTP response helpers (`http/responder`)
-- Logging and observability primitives
-- Plugin runtime and common middleware/tooling
+- 认证与授权（基于 Casbin）
+- 标准化 HTTP 响应输出（`http/responder`）
+- 日志与可观测能力
+- 插件运行时与公共中间件/工具
 
-Out of scope:
+不承载：
 
-- Business orchestration and domain-specific workflows
+- 业务编排与领域流程
 
-## Module Path
+## 模块路径
 
 ```go
 module github.com/leeforge/framework
 ```
 
-## Installation
+## 安装方式
 
-### Use a tagged release (recommended)
+### 使用发布版本（推荐）
 
 ```bash
 go get github.com/leeforge/framework@v0.1.0
 ```
 
-### Local monorepo development
+### Monorepo 本地联调
 
-In your backend `go.mod`:
+在 backend 的 `go.mod` 中添加：
 
 ```go
 require github.com/leeforge/framework v0.0.0
@@ -39,17 +39,17 @@ require github.com/leeforge/framework v0.0.0
 replace github.com/leeforge/framework => ../framework
 ```
 
-## Package Map
+## 包结构速览
 
-- `auth`: auth bootstrap + RBAC/ABAC managers
-- `http/responder`: standard API success/error response output
-- `logging`: structured logger abstraction based on zap
-- `plugin`: plugin runtime primitives
-- `permission`: shared permission/domain helpers
+- `auth`: 鉴权初始化 + RBAC/ABAC 管理器
+- `http/responder`: 统一 API 成功/失败响应
+- `logging`: 基于 zap 的结构化日志抽象
+- `plugin`: 插件运行时基础能力
+- `permission`: 权限与域相关公共能力
 
-## Quick Start
+## 快速开始
 
-### 1. Initialize logger
+### 1. 初始化日志
 
 ```go
 package main
@@ -66,7 +66,7 @@ func newLogger() logging.Logger {
 }
 ```
 
-### 2. Initialize auth core (Casbin chain)
+### 2. 初始化鉴权核心（Casbin 链路）
 
 ```go
 package main
@@ -86,7 +86,7 @@ func setupAuth(ctx context.Context, databaseURL string) (*frameAuth.AuthCore, er
 }
 ```
 
-### 3. Check permissions through RBAC manager
+### 3. 通过 RBAC 管理器校验权限
 
 ```go
 package main
@@ -102,7 +102,7 @@ func canReadUsers(ctx context.Context, core *frameAuth.AuthCore, userID string) 
 }
 ```
 
-### 4. Return standard HTTP responses
+### 4. 输出标准响应
 
 ```go
 package main
@@ -152,9 +152,9 @@ func badInput(w http.ResponseWriter, r *http.Request, details any) {
 }
 ```
 
-## Response Contract
+## 标准响应结构
 
-All API responses should follow this structure:
+所有 API 响应都应保持以下结构：
 
 ```json
 {
@@ -167,7 +167,7 @@ All API responses should follow this structure:
 }
 ```
 
-Error example:
+错误响应示例：
 
 ```json
 {
@@ -186,14 +186,14 @@ Error example:
 }
 ```
 
-## Integration Rules
+## 集成约束
 
-- Keep authorization decisions inside Casbin/RBAC managers.
-- Do not hardcode permission logic in application handlers.
-- Use `http/responder` for all API output to keep a consistent response shape.
-- Keep business orchestration in upper business modules/plugins, not in framework core.
+- 权限决策必须通过 Casbin/RBAC 管理器完成。
+- 禁止在应用层 handler 硬编码权限逻辑。
+- 所有 API 输出统一使用 `http/responder`，保持响应结构一致。
+- 业务编排必须留在上层业务模块/插件，不进入 framework 核心层。
 
-## Migration Notes
+## 迁移说明
 
-- During migration in monorepo, local `replace` is acceptable.
-- After publishing tags, downstream services should use versioned `require` and remove local `replace`.
+- Monorepo 迁移阶段可使用本地 `replace` 联调。
+- 独立仓库发布版本后，下游服务应改为版本化 `require`，并移除本地 `replace`。
