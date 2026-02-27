@@ -23,7 +23,7 @@
 package main
 
 import (
-    "github.com/JsonLee12138/leeforge/frame-core/logging"
+    "github.com/leeforge/framework/logging"
     "go.uber.org/zap"
 )
 
@@ -163,7 +163,7 @@ logger := logging.FromContext(ctx)
 import (
     "net/http"
     "github.com/go-chi/chi/v5"
-    "github.com/JsonLee12138/leeforge/frame-core/logging"
+    "github.com/leeforge/framework/logging"
 )
 
 func main() {
